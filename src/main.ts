@@ -3,6 +3,7 @@ import type { Dataset } from './core/types';
 import { mountDaily } from './ui/dailyView';
 import { mountRide } from './ui/rideView';
 import { mountStreak } from './ui/streakView';
+import { sound } from './ui/sound';
 
 const app = document.querySelector<HTMLElement>('#app')!;
 
@@ -38,6 +39,12 @@ async function boot(): Promise<void> {
 
   tabs.forEach(t => t.addEventListener('click', () => show(t.dataset.view!)));
   show(new URLSearchParams(location.search).get('view') ?? 'streak');
+
+  const muteBtn = document.querySelector<HTMLButtonElement>('#mute')!;
+  muteBtn.textContent = sound.isMuted() ? '🔇' : '🔊';
+  muteBtn.addEventListener('click', () => {
+    muteBtn.textContent = sound.toggle() ? '🔇' : '🔊';
+  });
 }
 
 void boot();

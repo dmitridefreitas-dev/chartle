@@ -25,6 +25,8 @@ export interface StreakState {
   best: number;
   rounds: number;
   wins: number;
+  todayBest: number;
+  todayDay: number;   // dayNumber the todayBest belongs to
 }
 
 export function buildRound(data: Dataset, rand: () => number = Math.random): StreakRound {
@@ -66,12 +68,17 @@ export function outcome(round: StreakRound): Call {
   return last >= decision ? 'up' : 'down';
 }
 
-export function applyCall(state: StreakState, correct: boolean): StreakState {
+export function applyCall(state: StreakState, correct: boolean, day = 0): StreakState {
   const next: StreakState = { ...state, rounds: state.rounds + 1 };
+  if (next.todayDay !== day) {         // fresh day → fresh beatable target
+    next.todayDay = day;
+    next.todayBest = 0;
+  }
   if (correct) {
     next.wins = state.wins + 1;
     next.streak = state.streak + 1;
     next.best = Math.max(state.best, next.streak);
+    next.todayBest = Math.max(next.todayBest, next.streak);
   } else {
     next.streak = 0;
   }
@@ -83,13 +90,16 @@ export function applyCall(state: StreakState, correct: boolean): StreakState {
 const KEY = 'chartle.streak.v1';
 const storage: Storage | null = typeof localStorage === 'undefined' ? null : localStorage;
 
+const FALLBACK: StreakState = {
+  streak: 0, best: 0, rounds: 0, wins: 0, todayBest: 0, todayDay: -1,
+};
+
 export function loadStreak(): StreakState {
   try {
     const raw = storage?.getItem(KEY);
-    const fallback: StreakState = { streak: 0, best: 0, rounds: 0, wins: 0 };
-    return raw ? { ...fallback, ...(JSON.parse(raw) as StreakState) } : fallback;
+    return raw ? { ...FALLBACK, ...(JSON.parse(raw) as StreakState) } : { ...FALLBACK };
   } catch {
-    return { streak: 0, best: 0, rounds: 0, wins: 0 };
+    return { ...FALLBACK };
   }
 }
 

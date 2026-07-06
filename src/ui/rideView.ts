@@ -10,6 +10,8 @@ import { dayNumber } from '../core/daily';
 import { Bank, loadBank, saveBank, takeBailout } from '../core/stats';
 import type { Dataset, Ride } from '../core/types';
 import { drawRideLine } from './chartRenderer';
+import { buzz, shake, toast } from './fx';
+import { sound } from './sound';
 
 const LEVERAGES = [1, 2, 3, 5, 10];
 const BARS_PER_SECOND = 9;
@@ -23,6 +25,8 @@ export function mountRide(root: HTMLElement, data: Dataset): void {
   let leverage = 3;
   let animation = 0;
   let startTime = 0;
+  let multsHit = new Set<number>();
+  const MULT_TOASTS = [2, 3, 5, 10];
 
   root.innerHTML = `
     <div class="panel">
@@ -92,6 +96,7 @@ export function mountRide(root: HTMLElement, data: Dataset): void {
     controls.classList.add('hidden');
     cashoutBtn.classList.remove('hidden');
     resultEl.innerHTML = '';
+    multsHit = new Set();
     storyEl.textContent = `Riding ${leverage}x leverage with ${stake} pts on a mystery chart…`;
     setMult(1, 'riding');
     startTime = performance.now();
@@ -111,6 +116,14 @@ export function mountRide(root: HTMLElement, data: Dataset): void {
     const frac = state.status === 'riding' ? targetBar : state.bar;
     drawRideLine(canvas, segment, frac, state.multiplier < 1);
     setMult(state.multiplier, state.status);
+
+    for (const threshold of MULT_TOASTS) {
+      if (state.multiplier >= threshold && !multsHit.has(threshold)) {
+        multsHit.add(threshold);
+        toast(`${threshold}x 🔥 don't get greedy`);
+        sound.win(threshold * 3);
+      }
+    }
 
     if (state.status === 'riding') {
       animation = requestAnimationFrame(tick);
@@ -132,6 +145,14 @@ export function mountRide(root: HTMLElement, data: Dataset): void {
 
     const profit = payout - stake;
     const liquidated = status === 'liquidated';
+    if (liquidated) {
+      sound.lose();
+      shake();
+      buzz([80, 50, 120]);
+    } else {
+      sound.cash();
+      buzz(25);
+    }
     const title = liquidated
       ? `\u{1F4A5} LIQUIDATED at ${leverage}x`
       : status === 'ended'

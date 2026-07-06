@@ -40,6 +40,7 @@ h1 span { color: var(--accent); }
 .tab.active { color: var(--text); border-color: var(--accent); background: rgba(79,143,247,0.12); }
 
 main { flex: 1; }
+main section { position: relative; }
 .hidden { display: none !important; }
 
 .panel { padding: 14px 0 6px; }
@@ -154,6 +155,72 @@ main { flex: 1; }
 .cashout:active { transform: scale(0.98); }
 
 /* ---- Streak mode ---- */
+.streak-hud {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  margin-bottom: 10px; gap: 8px;
+}
+.streak-hud .right { text-align: right; }
+.streak-center { text-align: center; }
+.streak-big {
+  display: block; font-family: ui-monospace, monospace; font-size: 44px;
+  font-weight: 800; color: var(--gold); line-height: 1;
+}
+.streak-title {
+  display: block; color: var(--muted); font-size: 10px; letter-spacing: 1.5px;
+  text-transform: uppercase; margin-top: 2px;
+}
+.pop { animation: popscale 0.35s cubic-bezier(0.2, 2.2, 0.4, 1); }
+@keyframes popscale { 0% { transform: scale(1); } 40% { transform: scale(1.45); } 100% { transform: scale(1); } }
+
+body.shake { animation: bodyshake 0.4s; }
+@keyframes bodyshake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-8px, 3px); }
+  40% { transform: translate(7px, -4px); }
+  60% { transform: translate(-5px, 2px); }
+  80% { transform: translate(4px, -2px); }
+}
+
+.particle {
+  position: fixed; width: 8px; height: 12px; border-radius: 2px;
+  pointer-events: none; z-index: 60;
+}
+.toast {
+  position: fixed; top: 18px; left: 50%; transform: translateX(-50%);
+  background: var(--panel); border: 1px solid var(--gold); color: var(--gold);
+  padding: 10px 18px; border-radius: 999px; font-weight: 700; font-size: 14px;
+  z-index: 70; box-shadow: 0 6px 24px rgba(0,0,0,0.5); transition: opacity 0.4s, transform 0.4s;
+}
+.toast.gone { opacity: 0; transform: translateX(-50%) translateY(-12px); }
+
+.tape { font-size: 18px; letter-spacing: 2px; margin: 6px 0 8px; }
+
+.challenge-banner {
+  background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.4);
+  color: var(--gold); border-radius: 10px; padding: 8px 12px; font-size: 12px;
+  margin-bottom: 10px; text-align: center;
+}
+.challenge-banner b { font-family: ui-monospace, monospace; }
+
+.onboard {
+  position: absolute; inset: 0; background: rgba(10,14,23,0.88);
+  display: flex; align-items: center; justify-content: center; z-index: 40;
+  backdrop-filter: blur(3px); border-radius: 12px;
+}
+.onboard-card {
+  text-align: center; max-width: 320px; padding: 28px 22px;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
+}
+.onboard-emoji { font-size: 40px; margin-bottom: 8px; }
+.onboard-card h2 { font-size: 20px; margin-bottom: 8px; }
+.onboard-card p { color: var(--muted); font-size: 13px; line-height: 1.6; margin-bottom: 16px; }
+
+.mute-btn {
+  background: none; border: 1px solid var(--border); color: var(--muted);
+  width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 14px;
+}
+.btn, .tab, .call, .cashout { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
 .updown { display: flex; gap: 10px; margin-top: 12px; }
 .call {
   flex: 1; padding: 20px 0; font-size: 19px; font-weight: 800; letter-spacing: 1px;

@@ -110,6 +110,7 @@ export function drawRideLine(
   closes: number[],
   upTo: number,
   underwater: boolean,
+  decisionIndex?: number,   // dashed vertical marker: "you called it from here"
 ): void {
   const ctx = setupCanvas(canvas);
   const w = canvas.getBoundingClientRect().width;
@@ -163,6 +164,17 @@ export function drawRideLine(
   ctx.shadowBlur = 12;
   ctx.fill();
   ctx.shadowBlur = 0;
+
+  if (decisionIndex !== undefined && decisionIndex <= full) {
+    ctx.setLineDash([3, 5]);
+    ctx.strokeStyle = 'rgba(251,191,36,0.55)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x(decisionIndex), pad);
+    ctx.lineTo(x(decisionIndex), h - pad);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
 
   // Entry reference line at 100.
   if (100 >= lo && 100 <= hi) {

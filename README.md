@@ -26,6 +26,25 @@ sometimes and a trap sometimes. Your lifetime accuracy is tracked. Beating
 ~55% consistently is genuinely hard, which is the entire lesson of the game,
 delivered at Flappy Bird cadence.
 
+### Designed to be addictive, on purpose
+
+- **Challenge links.** Your share carries the run's seed — a rival plays the
+  *exact same chart sequence*: "same charts, your turn." Head-to-head with
+  zero backend.
+- **Ranks.** Best streak earns a title to defend: Paper Hands → Intern →
+  Analyst → Senior PM → Hedge Fund Manager → Market Wizard → The Oracle.
+  Rank-ups get particle bursts and a fanfare.
+- **Variable-reward audio.** The win chime's *pitch climbs with your streak*
+  (a slot-machine trick, disclosed) — WebAudio synth, no assets, mute
+  persisted.
+- **Game feel.** Number pops, screen shake + haptics on death, green/red
+  full-screen flashes, an emoji tape of your run (🟩🟩🟥…), reveal ticks per
+  candle. All of it respects `prefers-reduced-motion`.
+- **Today vs all-time.** A fresh beatable target every day, plus the
+  three-second first-run onboarding so nobody bounces confused.
+
+![Onboarding](assets/chartle-onboard.png)
+
 ## Daily — Wordle for charts (hard mode for the sickos)
 
 Every UTC day, everyone on Earth gets the same real, anonymized 90-day

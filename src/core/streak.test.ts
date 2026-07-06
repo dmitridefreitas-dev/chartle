@@ -52,12 +52,15 @@ describe('streak rounds', () => {
 });
 
 describe('streak scoring', () => {
+  const fresh = () => ({ streak: 0, best: 0, rounds: 0, wins: 0, todayBest: 0, todayDay: -1 });
+
   it('grows on wins, records best, dies on a loss', () => {
-    let s = { streak: 0, best: 0, rounds: 0, wins: 0 };
+    let s = fresh();
     s = applyCall(s, true);
     s = applyCall(s, true);
     s = applyCall(s, true);
-    expect(s).toEqual({ streak: 3, best: 3, rounds: 3, wins: 3 });
+    expect(s.streak).toBe(3);
+    expect(s.best).toBe(3);
     s = applyCall(s, false);
     expect(s.streak).toBe(0);
     expect(s.best).toBe(3);
@@ -65,5 +68,16 @@ describe('streak scoring', () => {
     s = applyCall(s, true);
     expect(s.streak).toBe(1); // rebuilding
     expect(s.best).toBe(3);
+  });
+
+  it("today's best resets on a new day while all-time survives", () => {
+    let s = fresh();
+    s = applyCall(s, true, 10);
+    s = applyCall(s, true, 10);
+    expect(s.todayBest).toBe(2);
+    s = applyCall(s, false, 10);
+    s = applyCall(s, true, 11); // next day
+    expect(s.todayBest).toBe(1);
+    expect(s.best).toBe(2);
   });
 });

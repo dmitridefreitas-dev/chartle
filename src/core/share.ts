@@ -23,10 +23,18 @@ export function shareGrid(
 }
 
 export function streakBrag(
-  best: number, killedBy: string,
-  url = 'https://dmitridefreitas-dev.github.io/chartle/?view=streak',
+  best: number,
+  killedBy: string,
+  calls: boolean[] = [],
+  seed = '',
+  title = '',
+  base = 'https://dmitridefreitas-dev.github.io/chartle/',
 ): string {
-  return `⚡ Chartle Streak: ${best} charts called in a row.\nFinally humbled by ${killedBy}.\n${url}`;
+  const tape = calls.slice(-15).map(c => (c ? '\u{1F7E9}' : '\u{1F7E5}')).join('');
+  const rank = title ? ` · ${title}` : '';
+  const url = seed ? `${base}?view=streak&seed=${seed}` : `${base}?view=streak`;
+  const dare = seed ? '\nSame charts, your turn:' : '';
+  return `⚡ Chartle Streak: ${best} in a row${rank}\n${tape}\nHumbled by ${killedBy}.${dare}\n${url}`;
 }
 
 export function rideBrag(

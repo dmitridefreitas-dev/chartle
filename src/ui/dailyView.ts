@@ -9,6 +9,8 @@ import {
 } from '../core/stats';
 import type { Dataset, GuessFeedback, Mark } from '../core/types';
 import { drawCandles } from './chartRenderer';
+import { burst, buzz } from './fx';
+import { sound } from './sound';
 
 const MARK_EMOJI: Record<Mark, string> = { hit: '\u{1F7E9}', close: '\u{1F7E8}', miss: '⬛' };
 const DIMS = ['class', 'sector', 'cap', 'vol'] as const;
@@ -122,6 +124,9 @@ export function mountDaily(root: HTMLElement, data: Dataset): void {
     if (fb.correct) {
       state.done = true; state.won = true;
       recordResult(day, true, state.feedback.length);
+      sound.milestone();
+      burst(rows);
+      buzz([40, 60, 40]);
     } else if (state.feedback.length >= MAX_GUESSES) {
       state.done = true; state.won = false;
       recordResult(day, false, state.feedback.length);
