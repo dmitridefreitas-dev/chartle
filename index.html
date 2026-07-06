@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Chartle — guess the chart, ride the crash</title>
+  <meta name="description" content="A daily game for market degenerates: guess the real ticker behind the chart, or ride real historical crashes with leverage and fake money." />
+  <meta property="og:title" content="Chartle" />
+  <meta property="og:description" content="Guess the real chart. Ride the real crash. New puzzle every day." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>" />
+</head>
+<body>
+  <div id="app">
+    <header class="top">
+      <h1>CHART<span>LE</span></h1>
+      <nav class="tabs">
+        <button class="tab active" data-view="daily">Daily</button>
+        <button class="tab" data-view="ride">Ride 🚀</button>
+      </nav>
+    </header>
+    <main>
+      <section id="view-daily"></section>
+      <section id="view-ride" class="hidden"></section>
+    </main>
+    <footer class="foot">
+      real market data · no accounts · no real money ·
+      <a href="https://github.com/dmitridefreitas-dev/chartle" target="_blank" rel="noopener">source</a> ·
+      by <a href="https://dmitridefreitas.com" target="_blank" rel="noopener">Dmitri De Freitas</a>
+    </footer>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
