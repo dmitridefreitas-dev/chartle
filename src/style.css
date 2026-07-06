@@ -153,6 +153,29 @@ main { flex: 1; }
 }
 .cashout:active { transform: scale(0.98); }
 
+/* ---- Streak mode ---- */
+.updown { display: flex; gap: 10px; margin-top: 12px; }
+.call {
+  flex: 1; padding: 20px 0; font-size: 19px; font-weight: 800; letter-spacing: 1px;
+  border-radius: 14px;
+}
+.call.up { border-color: rgba(38,166,154,0.6); color: var(--up); background: rgba(38,166,154,0.08); }
+.call.down { border-color: rgba(239,83,80,0.6); color: var(--down); background: rgba(239,83,80,0.08); }
+.call:not(:disabled):hover { transform: translateY(-1px); }
+.streak-now { color: var(--gold); }
+.reveal-tag {
+  margin-top: 6px; color: var(--muted); font-size: 12px;
+  font-family: ui-monospace, monospace; text-align: center; min-height: 16px;
+}
+
+.flash {
+  position: fixed; inset: 0; pointer-events: none; z-index: 50;
+  animation: flashfade 0.45s ease-out forwards;
+}
+.flash.good { background: radial-gradient(circle, rgba(38,166,154,0.28), transparent 70%); }
+.flash.bad { background: radial-gradient(circle, rgba(239,83,80,0.34), transparent 70%); }
+@keyframes flashfade { from { opacity: 1; } to { opacity: 0; } }
+
 .foot {
   padding: 14px 2px 18px; color: var(--muted); font-size: 11px; text-align: center;
   border-top: 1px solid var(--border); margin-top: 18px;

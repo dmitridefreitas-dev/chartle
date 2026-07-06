@@ -22,6 +22,13 @@ export function shareGrid(
   return `Chartle #${puzzleNo} ${score}${flame}\n${rows.join('\n')}\n${url}`;
 }
 
+export function streakBrag(
+  best: number, killedBy: string,
+  url = 'https://dmitridefreitas-dev.github.io/chartle/?view=streak',
+): string {
+  return `⚡ Chartle Streak: ${best} charts called in a row.\nFinally humbled by ${killedBy}.\n${url}`;
+}
+
 export function rideBrag(
   ticker: string, mult: number, profit: number, liquidated: boolean,
   url = 'https://dmitridefreitas-dev.github.io/chartle/?view=ride',

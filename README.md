@@ -5,14 +5,28 @@
 
 **Play it: https://dmitridefreitas-dev.github.io/chartle/**
 
-A daily game for market degenerates, built on **real market data**. Two modes,
-two dopamine loops:
+A game for market degenerates, built on **real market data**. Three modes,
+three dopamine loops:
 
-| | **Daily** — guess the chart | **Ride 🚀** — survive the crash |
+| **Streak ⚡** — up or down? | **Daily** — guess the chart | **Ride 🚀** — survive the crash |
 |---|---|---|
-| | ![Daily mode](assets/chartle-daily.png) | ![Ride mode](assets/chartle-ride.png) |
+| ![Streak mode](assets/chartle-streak.png) | ![Daily mode](assets/chartle-daily.png) | ![Ride mode](assets/chartle-ride.png) |
 
-## Daily — Wordle for charts
+## Streak — the one you can't put down
+
+A real chart from market history draws in and freezes. **Call the next 10
+days: UP or DOWN.** The future animates in — green flash and your streak
+climbs, or red flash and it dies, with the reveal ("that was GME · Jan 2021")
+either way. Next chart loads in under a second. Arrow keys work. One wrong
+call kills the streak; the share text names the ticker that humbled you.
+
+It feels 50/50. It isn't quite — markets drift up slightly, charts you're
+shown skew toward interesting (volatile) history, and momentum is real
+sometimes and a trap sometimes. Your lifetime accuracy is tracked. Beating
+~55% consistently is genuinely hard, which is the entire lesson of the game,
+delivered at Flappy Bird cadence.
+
+## Daily — Wordle for charts (hard mode for the sickos)
 
 Every UTC day, everyone on Earth gets the same real, anonymized 90-day
 candlestick chart (rebased to 100 so the price level can't give it away). Six
@@ -65,11 +79,11 @@ leverage wearing a slot machine's clothes.
 - **Wordle architecture**: fully static, deployable anywhere, state in
   localStorage. The daily puzzle index is `(day × 2654435761) mod N` — a full
   permutation walk, identical for every player, no backend required.
-- **Tested core** (16 Vitest tests): deterministic daily selection and
+- **Tested core** (20 Vitest tests): deterministic daily selection and
   full-permutation coverage, guess-feedback scoring incl. ordinal directions,
-  share-grid rendering, streak rules across day gaps, and the crash engine —
-  cash-out math, exact liquidation threshold, absorbing terminal states,
-  auto-cash at episode end.
+  share-grid rendering, streak rules across day gaps, Streak-mode round
+  slicing/outcome/scoring, and the crash engine — cash-out math, exact
+  liquidation threshold, absorbing terminal states, auto-cash at episode end.
 - **CI deploys to GitHub Pages** on every push to main (test → build →
   deploy).
 
