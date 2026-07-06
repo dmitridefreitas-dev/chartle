@@ -26,3 +26,15 @@ export function seedFromString(s: string): number {
 export function randomSeedString(): string {
   return Math.floor(Math.random() * 36 ** 6).toString(36).padStart(6, '0');
 }
+
+// Challenge-link seeds arrive from an attacker-influenceable place: the
+// ?seed= URL parameter, which is reflected into the DOM (the challenge
+// banner) and into the shared rematch URL. Constrain it to the exact
+// base36 charset randomSeedString emits, so a crafted seed can never carry
+// HTML/markup into innerHTML. Returns null when nothing usable survives,
+// which tells the caller to fall back to a fresh random seed.
+export function sanitizeSeed(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  const clean = raw.toLowerCase().replace(/[^0-9a-z]/g, '').slice(0, 12);
+  return clean.length > 0 ? clean : null;
+}

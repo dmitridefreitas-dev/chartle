@@ -98,7 +98,7 @@ leverage wearing a slot machine's clothes.
 - **Wordle architecture**: fully static, deployable anywhere, state in
   localStorage. The daily puzzle index is `(day × 2654435761) mod N` — a full
   permutation walk, identical for every player, no backend required.
-- **Tested core** (20 Vitest tests): deterministic daily selection and
+- **Tested core** (35 Vitest tests): deterministic daily selection and
   full-permutation coverage, guess-feedback scoring incl. ordinal directions,
   share-grid rendering, streak rules across day gaps, Streak-mode round
   slicing/outcome/scoring, and the crash engine — cash-out math, exact
@@ -110,7 +110,7 @@ leverage wearing a slot machine's clothes.
 
 ```bash
 npm install
-npm test          # 16 tests
+npm test          # 35 tests
 npm run dev       # vite dev server
 
 # rebuild the dataset (optional — dataset.json is committed)

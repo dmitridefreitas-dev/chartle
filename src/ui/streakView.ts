@@ -6,12 +6,13 @@
 
 import { dayNumber } from '../core/daily';
 import { isMilestone, nextMilestone, titleFor } from '../core/progress';
-import { mulberry32, randomSeedString, seedFromString } from '../core/rng';
+import { mulberry32, randomSeedString, sanitizeSeed, seedFromString } from '../core/rng';
 import { applyCall, buildRound, HORIZON, loadStreak, outcome, saveStreak,
   SHOWN_BARS, StreakRound } from '../core/streak';
 import { streakBrag } from '../core/share';
 import type { Dataset } from '../core/types';
 import { drawRideLine } from './chartRenderer';
+import { esc } from './escape';
 import { burst, buzz, pop, shake, toast } from './fx';
 import { sound } from './sound';
 
@@ -21,7 +22,7 @@ const ONBOARD_KEY = 'chartle.onboarded.v1';
 
 export function mountStreak(root: HTMLElement, data: Dataset): void {
   let state = loadStreak();
-  const urlSeed = new URLSearchParams(location.search).get('seed');
+  const urlSeed = sanitizeSeed(new URLSearchParams(location.search).get('seed'));
   const isChallenge = !!urlSeed;
   let runSeed = urlSeed ?? randomSeedString();
   let rand = mulberry32(seedFromString(runSeed));
@@ -148,7 +149,7 @@ export function mountStreak(root: HTMLElement, data: Dataset): void {
     refreshHud();
 
     const move = (round.closes[round.closes.length - 1] / round.closes[SHOWN_BARS - 1] - 1) * 100;
-    tagEl.innerHTML = `<b>${round.ticker}</b> · ${round.era} · ${move >= 0 ? '+' : ''}${move.toFixed(1)}% in ${HORIZON}d`;
+    tagEl.innerHTML = `<b>${esc(round.ticker)}</b> · ${esc(round.era)} · ${move >= 0 ? '+' : ''}${move.toFixed(1)}% in ${HORIZON}d`;
 
     const flash = document.createElement('div');
     flash.className = `flash ${correct ? 'good' : 'bad'}`;
@@ -183,7 +184,7 @@ export function mountStreak(root: HTMLElement, data: Dataset): void {
     const acc = state.rounds ? Math.round((100 * state.wins) / state.rounds) : 0;
     resultEl.innerHTML = `
       <div class="reveal loss">
-        <div class="reveal-title">💀 Run over at <b>${finished}</b> — killed by <b>${round.ticker}</b> · ${round.era}</div>
+        <div class="reveal-title">💀 Run over at <b>${finished}</b> — killed by <b>${esc(round.ticker)}</b> · ${esc(round.era)}</div>
         <div class="tape">${tape}</div>
         <div class="reveal-story">
           Rank: <b>${titleFor(state.best)}</b>${next ? ` — ${next.streak - state.best} more for ${next.title}` : ' — maximum rank'}

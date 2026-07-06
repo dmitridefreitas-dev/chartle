@@ -9,6 +9,7 @@ import {
 } from '../core/stats';
 import type { Dataset, GuessFeedback, Mark } from '../core/types';
 import { drawCandles } from './chartRenderer';
+import { esc } from './escape';
 import { burst, buzz } from './fx';
 import { sound } from './sound';
 
@@ -80,7 +81,7 @@ export function mountDaily(root: HTMLElement, data: Dataset): void {
         <span class="cell">${MARK_EMOJI[f.sector]}</span>
         <span class="cell">${MARK_EMOJI[f.cap]}<i>${dirArrow(f.cap, f.capDir)}</i></span>
         <span class="cell">${MARK_EMOJI[f.vol]}<i>${dirArrow(f.vol, f.volDir)}</i></span>
-        <span class="cell ticker">${f.guess}</span>
+        <span class="cell ticker">${esc(f.guess)}</span>
       </div>`;
     }).join('');
   }
@@ -90,8 +91,8 @@ export function mountDaily(root: HTMLElement, data: Dataset): void {
     result.innerHTML = `
       <div class="reveal ${state.won ? 'win' : 'loss'}">
         <div class="reveal-title">${state.won ? 'Solved.' : 'The market wins.'}
-          <b>${puzzle.t}</b> — ${answerMeta.name}</div>
-        <div class="reveal-story">${puzzle.story}</div>
+          <b>${esc(puzzle.t)}</b> — ${esc(answerMeta.name)}</div>
+        <div class="reveal-story">${esc(puzzle.story)}</div>
         <div class="statline">
           <span><b>${stats.streak}</b> streak</span>
           <span><b>${stats.maxStreak}</b> best</span>
@@ -146,7 +147,7 @@ export function mountDaily(root: HTMLElement, data: Dataset): void {
         (u.ticker.startsWith(q) || u.name.toUpperCase().includes(q)))
       .slice(0, 6);
     suggestions.innerHTML = hits.map(u =>
-      `<button class="sugg" data-t="${u.ticker}"><b>${u.ticker}</b> ${u.name}</button>`).join('');
+      `<button class="sugg" data-t="${esc(u.ticker)}"><b>${esc(u.ticker)}</b> ${esc(u.name)}</button>`).join('');
     suggestions.querySelectorAll<HTMLButtonElement>('.sugg').forEach(el =>
       el.addEventListener('click', () => submit(el.dataset.t!)));
   });

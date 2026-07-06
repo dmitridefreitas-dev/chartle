@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { isMilestone, nextMilestone, RANKS, titleFor } from './progress';
-import { mulberry32, randomSeedString, seedFromString } from './rng';
+import { mulberry32, randomSeedString, sanitizeSeed, seedFromString } from './rng';
 import { streakBrag } from './share';
 
 describe('seeded rng (challenge links)', () => {
@@ -26,6 +26,29 @@ describe('seeded rng (challenge links)', () => {
 
   it('seed strings are url-safe base36', () => {
     for (let i = 0; i < 20; i++) expect(randomSeedString()).toMatch(/^[0-9a-z]{6}$/);
+  });
+});
+
+describe('seed sanitization (reflected-XSS guard)', () => {
+  it('passes a legit challenge seed through untouched', () => {
+    expect(sanitizeSeed('k3x9zz')).toBe('k3x9zz');
+    expect(sanitizeSeed('ABC123')).toBe('abc123'); // normalised, still valid
+  });
+
+  it('strips markup so a crafted ?seed= cannot reach innerHTML', () => {
+    const payload = '"><img src=x onerror=alert(document.domain)>';
+    const clean = sanitizeSeed(payload)!;
+    expect(clean).toMatch(/^[0-9a-z]*$/);       // no <, >, ", =, space, (
+    expect(clean).not.toContain('<');
+    expect(clean).not.toContain('"');
+    expect(clean.length).toBeLessThanOrEqual(12);
+  });
+
+  it('returns null for empty / all-stripped input so the caller goes random', () => {
+    expect(sanitizeSeed(null)).toBeNull();
+    expect(sanitizeSeed('')).toBeNull();
+    expect(sanitizeSeed('<>"\'')).toBeNull();
+    expect(sanitizeSeed('   ')).toBeNull();
   });
 });
 

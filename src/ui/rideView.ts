@@ -10,6 +10,7 @@ import { dayNumber } from '../core/daily';
 import { Bank, loadBank, saveBank, takeBailout } from '../core/stats';
 import type { Dataset, Ride } from '../core/types';
 import { drawRideLine } from './chartRenderer';
+import { esc } from './escape';
 import { buzz, shake, toast } from './fx';
 import { sound } from './sound';
 
@@ -164,7 +165,7 @@ export function mountRide(root: HTMLElement, data: Dataset): void {
     resultEl.innerHTML = `
       <div class="reveal ${liquidated || profit < 0 ? 'loss' : 'win'}">
         <div class="reveal-title">${title} <b>${profit >= 0 ? '+' : ''}${Math.round(profit)}</b> pts</div>
-        <div class="reveal-story">That was <b>${ride.t}</b> — ${ride.story}</div>
+        <div class="reveal-story">That was <b>${esc(ride.t)}</b> — ${esc(ride.story)}</div>
         ${peakNote}
         <div class="stake-row">
           <button class="btn primary" id="again">Ride again</button>
